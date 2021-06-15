@@ -45,12 +45,12 @@ export default function LogIn() {
                             <TextField inputRef={password} fullWidth label="Password" type="password" name="password" variant="outlined" />
                         </ListItem>
 
-                        <ListItem align="center">
+                        <ListItem>
                             <Grid container spacing={2}>
-                                <Grid item xs={6}>
+                                <Grid item xs={6} align="center">
                                     <Button type="submit" variant="contained" color="secondary">Log In</Button>
                                 </Grid>
-                                <Grid item xs={6}>
+                                <Grid item xs={6} align="center">
                                     <Button variant="contained" color="primary" onClick={redirectToSignUp} >Sign Up</Button>
                                 </Grid>
                             </Grid>

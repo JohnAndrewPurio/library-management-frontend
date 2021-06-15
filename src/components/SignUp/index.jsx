@@ -1,4 +1,4 @@
-import { Paper, TextField, Button, List, ListItem, makeStyles, Typography } from '@material-ui/core'
+import { Paper, TextField, Button, List, ListItem, Typography } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { useStyles } from './styles'
 import { useRef } from 'react'
@@ -29,8 +29,6 @@ export default function SignUp() {
             password: password.current.value,
             profileImage: image?.current?.value,
         }
-
-        console.log(name, email, password, image)
 
         const formData = new FormData()
         formData.append("name", data.name)
