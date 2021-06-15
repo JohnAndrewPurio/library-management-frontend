@@ -5,13 +5,11 @@ import { promptAddBook } from '../../redux/actions'
 export default function AddBookForm() {
     const dispatch = useDispatch()
     const addBook = useSelector(state => state.addBook)
-    
-    console.log(addBook)
 
     const closeDialog = () => {
         dispatch( promptAddBook(false) )
     }
-
+    
     return (
         <Dialog
             open={addBook}

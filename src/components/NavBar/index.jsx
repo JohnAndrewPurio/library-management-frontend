@@ -1,27 +1,18 @@
 import { AppBar, CssBaseline, Toolbar, IconButton, Typography, Button } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
-import { makeStyles } from '@material-ui/core/styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { promptSignUp } from '../../redux/actions'
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-      },
-      menuButton: {
-        marginRight: theme.spacing(2),
-      },
-      title: {
-        flexGrow: 1,
-    },
-}))
+import { useHistory } from 'react-router-dom'
+import { useStyles } from './styles'
 
 export default function NavBar({toggleDrawer}) {
     const classes = useStyles()
     const dispatch = useDispatch()
+    const history = useHistory()
     const signUpDialog = useSelector(state => state.signUpDialog)
 
     const toggleDialog = () => {
+      history.push('/signup')
       dispatch( promptSignUp(!signUpDialog) )
     }
 

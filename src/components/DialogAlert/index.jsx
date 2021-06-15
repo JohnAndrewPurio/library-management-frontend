@@ -1,8 +1,10 @@
 import { Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, Button } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
-import { promptDeleteBook } from '../../redux/actions'
+import { promptDeleteBook, storeBooksListData } from '../../redux/actions'
+import { url } from '../../config'
+import { requestDeleteBook } from '../../redux/actions'
 
-export default function DialogAlert({deleteBookRequest, promptDelete}) {
+export default function DialogAlert() {
     const dispatch = useDispatch()
     const deleteBook = useSelector(state => state.deleteBook)
     const bookToDelete = useSelector(state => state.bookToDelete)
@@ -10,6 +12,12 @@ export default function DialogAlert({deleteBookRequest, promptDelete}) {
     const closeDialog = () => {
         dispatch( promptDeleteBook(false) )
     }
+
+    const deleteBookRequest = () => {
+        dispatch( requestDeleteBook(url + '/books/', bookToDelete?._id) )
+        dispatch( promptDeleteBook(false) )
+        dispatch( storeBooksListData(null) )
+    } 
 
     return (
         <>
@@ -19,17 +27,17 @@ export default function DialogAlert({deleteBookRequest, promptDelete}) {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">Delete {bookToDelete?.bookName}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">Delete {bookToDelete?.title}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Are you sure to delete the book entitled {bookToDelete?.bookName}? This action is irreversible!
+                        Are you sure to delete the book entitled {bookToDelete?.title}? This action is irreversible!
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={closeDialog} color="primary">
                         No
                     </Button>
-                    <Button onClick={()  => deleteBookRequest(bookToDelete?.bookID) } color="primary" autoFocus>
+                    <Button onClick={deleteBookRequest} color="primary" autoFocus>
                         Yes
                     </Button>
                 </DialogActions>
