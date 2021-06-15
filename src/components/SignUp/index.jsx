@@ -16,6 +16,7 @@ export default function SignUp() {
     const image = useRef()
 
     const submitHandler = (e) => {
+        e.preventDefault()
         if (password.current.value !== confirm.current.value) {
             console.log('Invalid Form Data')
 
@@ -26,7 +27,7 @@ export default function SignUp() {
             name: name.current.value,
             email: email.current.value,
             password: password.current.value,
-            profileImage: image.current.value,
+            profileImage: image?.current?.value,
         }
 
         console.log(name, email, password, image)
@@ -36,8 +37,6 @@ export default function SignUp() {
         formData.append("email", data.email)
         formData.append("password", data.password)
         formData.append("profileImage", data.profileImage)
-
-        e.preventDefault()
 
         dispatch(signUpUser(serverEndPoint, formData))
     }

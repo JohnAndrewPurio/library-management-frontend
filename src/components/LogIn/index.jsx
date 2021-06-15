@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { Button, List, ListItem, Paper, TextField, Typography } from '@material-ui/core'
+import { Button, Grid, List, ListItem, Paper, TextField, Typography } from '@material-ui/core'
 import { useStyles } from './styles'
 import { useDispatch } from 'react-redux'
 import { logInUser } from '../../redux/actions'
@@ -21,7 +21,7 @@ export default function LogIn() {
 
         e.preventDefault()
 
-        dispatch( logInUser(logInEndPoint, data) )
+        dispatch(logInUser(logInEndPoint, data))
     }
 
     const redirectToSignUp = () => {
@@ -29,10 +29,11 @@ export default function LogIn() {
     }
 
     return (
-        <Paper className={classes.container} elevated={10} >
+        <div className={classes.login}>
+            <Paper className={classes.container} elevated={10} >
                 <form action={logInEndPoint} method="POST" onSubmit={submitHandler} >
                     <List className={classes.list}>
-                        <ListItem> 
+                        <ListItem>
                             <Typography variant="h6" >Log In</Typography>
                         </ListItem>
 
@@ -44,13 +45,21 @@ export default function LogIn() {
                             <TextField inputRef={password} fullWidth label="Password" type="password" name="password" variant="outlined" />
                         </ListItem>
 
-                        <ListItem>
-                            <Button type="submit" variant="contained" color="primary">Log In</Button>
+                        <ListItem align="center">
+                            <Grid container spacing={2}>
+                                <Grid item xs={6}>
+                                    <Button type="submit" variant="contained" color="secondary">Log In</Button>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Button variant="contained" color="primary" onClick={redirectToSignUp} >Sign Up</Button>
+                                </Grid>
+                            </Grid>
                         </ListItem>
                     </List>
                 </form>
 
-                <Button variant="contained" color="primary" onClick={redirectToSignUp} >Sign Up</Button>
+
             </Paper>
+        </div>
     )
 }
