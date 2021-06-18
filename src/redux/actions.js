@@ -1,11 +1,18 @@
 import {
     CACHE_BOOK_TO_DELETE, PROMPT_ADD_BOOK, PROMPT_DELETE_BOOK, PROMPT_SIGN_UP, STORE_BOOKS_LIST_DATA, STORE_ACCESS_TOKEN, STORE_CATEGORIES_DATA,
-    REDIRECT_TO_PAGE
+    REDIRECT_TO_PAGE, STORE_ERROR, CLEAR_STORED_DATA
 } from "./action_types"
+import './axiosIntercept'
 import axios from 'axios'
+import { booksEndPoint, tokenEndPoint } from "../config"
 
 export const cacheBookToDelete = (payload) => ({
     type: CACHE_BOOK_TO_DELETE,
+    payload: payload
+})
+
+export const clearStoredData = (payload) => ({
+    type: CLEAR_STORED_DATA,
     payload: payload
 })
 
@@ -39,6 +46,11 @@ export const storeAccessToken = (payload) => ({
     payload: payload
 })
 
+export const storeError = (payload) => ({
+    type: STORE_ERROR,
+    payload: payload
+})
+
 export const redirectToPage = (payload) => ({
     type: REDIRECT_TO_PAGE,
     payload: payload
@@ -46,10 +58,10 @@ export const redirectToPage = (payload) => ({
 
 export const requestBooksListData = (source) => {
     return async (dispatch, getState) => {
-        const { access_token } = getState()
+        const { tokens } = getState()
 
         const headers = {
-            'Authorization': `Bearer ${access_token}`
+            'Authorization': `Bearer ${tokens.access_token}`
         }
 
         const request = {
@@ -63,8 +75,7 @@ export const requestBooksListData = (source) => {
 
             dispatch(storeBooksListData(result.data))
         } catch (e) {
-            dispatch( redirectToPage('/login') )
-            alert('Session expired. Please login')
+            dispatch( requestBooksListData(booksEndPoint) )
         }
     }
 }
@@ -125,15 +136,44 @@ export const logInUser = (source, data) => {
             const results = await postData.json()
 
             if(results.error) {
-                console.log(results.error)
+                if( JSON.stringify(results.error) === '{}' )
+                    results.error = 'Invalid email or password'
+
+                dispatch( storeError(results.error) )
 
                 return
             }
 
-            console.log(results)
-
-            dispatch(storeAccessToken(results.access_token))
+            dispatch(storeAccessToken(results))
         } catch (e) {
+            console.log(e)
+        }
+    }
+}
+
+export const requestNewAccessToken = (source = tokenEndPoint) => {
+    return async (dispatch, getState) => {
+        const { tokens } = getState()
+
+        const headers = {
+            'Authorization': `Bearer ${tokens.refresh_token}`
+        }
+
+        const request = {
+            method: 'GET',
+            url: source,
+            headers: headers
+        }
+
+        try {
+            const fetchedData = await axios(request)
+            const refreshedAccessToken = fetchedData.data
+
+            refreshedAccessToken.refresh_token = tokens.refresh_token
+            refreshedAccessToken.refresh_token_expiry = tokens.refresh_token_expiry
+            
+            dispatch(storeAccessToken(refreshedAccessToken))
+        } catch(e) {
             console.log(e)
         }
     }

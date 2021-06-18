@@ -13,7 +13,7 @@ export default function Main() {
     const dispatch = useDispatch()
     const [drawerOpen, setDrawerOpen] = useState(false)
     const booksList = useSelector(state => state.booksList)
-    const access_token = useSelector(state => state.access_token)
+    const tokens = useSelector(state => state.tokens)
     const pageRedirect = useSelector(state => state.pageRedirect)
 
     const toggleDrawer = () => {
@@ -21,17 +21,17 @@ export default function Main() {
     }
 
     useEffect( () => {
-        if(!booksList && access_token)
+        if(!booksList && tokens)
             dispatch( requestBooksListData(booksEndPoint) )
     }, [booksList])
 
     useEffect( () => {
-        localStorage.setItem('access_token', access_token)
+        localStorage.setItem('tokens', JSON.stringify( tokens ) )
     }, [])
 
     useEffect(() => {
         if(pageRedirect) {
-            localStorage.removeItem('access_token')
+            localStorage.removeItem('tokens')
             history.push(pageRedirect)
             dispatch( redirectToPage(null) )
         }

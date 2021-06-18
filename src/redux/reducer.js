@@ -1,6 +1,6 @@
 import { 
     CACHE_BOOK_TO_DELETE, STORE_ACCESS_TOKEN, STORE_BOOKS_LIST_DATA, PROMPT_ADD_BOOK, PROMPT_DELETE_BOOK, PROMPT_SIGN_UP, STORE_CATEGORIES_DATA,
-    REDIRECT_TO_PAGE 
+    REDIRECT_TO_PAGE, STORE_ERROR, CLEAR_STORED_DATA 
 } from "./action_types"
 
 const initState = {
@@ -10,7 +10,8 @@ const initState = {
 
     deleteBook: false,
     addBook: false,
-    access_token: null,
+    tokens: null,
+    errors: null,
 
     categoriesData: null,
     pageRedirect: null
@@ -27,6 +28,8 @@ export default function reducer(state = initState, action) {
     selector[STORE_ACCESS_TOKEN] = storeAccessToken
     selector[STORE_CATEGORIES_DATA] = storeCategoriesData
     selector[REDIRECT_TO_PAGE] = redirectToPage
+    selector[STORE_ERROR] = storeError
+    selector[CLEAR_STORED_DATA] = clearStoredData
 
     if(selector[type] === undefined) return {...state}
 
@@ -38,7 +41,7 @@ function cacheBookToDelete(state, payload) {
 } 
 
 function storeAccessToken(state, payload) {
-    return {...state, access_token: payload}
+    return {...state, tokens: payload}
 }
 
 function storeBooksListData(state, payload) {
@@ -47,6 +50,10 @@ function storeBooksListData(state, payload) {
 
 function storeCategoriesData(state, payload) {
     return {...state, categoriesData: payload}
+}
+
+function storeError(state, payload) {
+    return {...state, errors: payload}
 }
 
 function promptAddBook(state, payload) {
@@ -63,4 +70,8 @@ function promptSignUp(state, payload) {
 
 function redirectToPage(state, payload) {
     return {...state, pageRedirect: payload}
+}
+
+function clearStoredData(state, payload) {
+    return initState
 }

@@ -1,13 +1,13 @@
 import axios from 'axios'
-import { Dispatch } from "redux"
-import { redirectToPage } from './actions';
+import { store } from './store'
+import { redirectToPage, requestNewAccessToken } from './actions';
 
 axios.interceptors.request.use((request) => {
     console.log(request.method, request.url)
 
     return request;
 }, (error) => {
-    Dispatch( redirectToPage('/login') )
+    store.dispatch( redirectToPage('/login') )
     return Promise.reject(error);
 })
 
@@ -15,8 +15,11 @@ axios.interceptors.response.use((response) => {
     console.log(response.status)
 
     return response;
-}, function (error) {
-    Dispatch( redirectToPage('/login') )
+}, (error) => {
+    console.log('Error Intercepted')
+    // store.dispatch( redirectToPage('/login') )
+    store.dispatch( requestNewAccessToken() )
+
     return Promise.reject(error);
 })
 

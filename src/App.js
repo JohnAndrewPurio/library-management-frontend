@@ -10,18 +10,18 @@ import { storeAccessToken } from './redux/actions'
 
 function App() {
   const classes = useStyles()
-  const accessToken = useSelector(state => state.access_token)
+  const tokens = useSelector(state => state.tokens)
   const dispatch = useDispatch()
   const history = useHistory()
 
   useEffect( () => {
-    const token = localStorage.getItem('access_token')
+    const token = JSON.parse( localStorage.getItem('tokens') )
 
     dispatch( storeAccessToken(token) )
   }, [])
 
   useEffect(() => {
-    if(!accessToken) {
+    if(!tokens) {
       history.push('/login')
 
       return
@@ -30,14 +30,14 @@ function App() {
     history.push('/')
 
     // eslint-disable-next-line
-  }, [accessToken])
+  }, [tokens])
 
   return (
     <div className={classes.App} >
       <Switch>
         <Route exact path="/" >
           {
-            accessToken? <Main />: <Loading />
+            tokens? <Main />: <Loading />
           }
         </Route>
         <Route exact path="/login" component={LogIn} />

@@ -1,4 +1,4 @@
-import { Paper, TextField, Button, List, ListItem, Typography } from '@material-ui/core'
+import { Grid, Paper, TextField, Button, List, ListItem, Typography } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { useStyles } from './styles'
 import { useRef } from 'react'
@@ -40,7 +40,7 @@ export default function SignUp() {
     }
 
     return (
-        <>
+        <div className={classes.root} >
             <Paper className={classes.container} elevated={10} >
                 <form action={serverEndPoint} method="POST" encType="multipart/form-data" onSubmit={submitHandler} >
                     <List className={classes.list}>
@@ -60,24 +60,28 @@ export default function SignUp() {
                             <TextField inputRef={confirm} fullWidth label="Confirm Password" type="password" variant="outlined" />
                         </ListItem>
                         <ListItem>
-                            <input
-                                accept="image/*"
-                                className={classes.hidden}
-                                id="contained-button-file"
-                                type="file"
-                            />
-                            <label htmlFor="contained-button-file">
-                                <Button variant="contained" color="primary" component="span">
-                                    Upload
-                                </Button>
-                            </label>
-                        </ListItem>
-                        <ListItem>
-                            <Button type="submit" variant="contained" color="primary">Submit</Button>
+                            <Grid container>
+                                <Grid items xs={6} align="center">
+                                    <input
+                                        accept="image/*"
+                                        className={classes.hidden}
+                                        id="contained-button-file"
+                                        type="file"
+                                    />
+                                    <label htmlFor="contained-button-file">
+                                        <Button variant="contained" color="secondary" component="span">
+                                            Upload
+                                        </Button>
+                                    </label>
+                                </Grid>
+                                <Grid items xs={6} align="center">
+                                    <Button type="submit" variant="contained" color="primary">Submit</Button>
+                                </Grid>
+                            </Grid>
                         </ListItem>
                     </List>
                 </form>
             </Paper>
-        </>
+        </div>
     )
 }

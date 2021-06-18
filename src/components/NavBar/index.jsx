@@ -1,43 +1,52 @@
 import { AppBar, CssBaseline, Toolbar, IconButton, Typography, Button } from '@material-ui/core'
+import { ExitToApp } from '@material-ui/icons'
 import MenuIcon from '@material-ui/icons/Menu'
-import { useDispatch, useSelector } from 'react-redux'
-import { promptSignUp } from '../../redux/actions'
+import { useDispatch } from 'react-redux'
+import { clearStoredData } from '../../redux/actions'
 import { useHistory } from 'react-router-dom'
 import { useStyles } from './styles'
 
-export default function NavBar({toggleDrawer}) {
-    const classes = useStyles()
-    const dispatch = useDispatch()
-    const history = useHistory()
-    const signUpDialog = useSelector(state => state.signUpDialog)
+export default function NavBar({ toggleDrawer }) {
+  const classes = useStyles()
+  const dispatch = useDispatch()
+  const history = useHistory()
 
-    const toggleDialog = () => {
-      history.push('/signup')
-      dispatch( promptSignUp(!signUpDialog) )
-    }
+  const logOut = () => {
+    localStorage.removeItem('tokens')
 
-    return (
-        <>
-            <CssBaseline />
-            <AppBar position="static">
-                <Toolbar>
-                  <IconButton 
-                    edge="start" 
-                    className={classes.menuButton} 
-                    color="inherit" 
-                    aria-label="menu"
-                    onClick={toggleDrawer}
-                  >
-                    <MenuIcon />
-                  </IconButton>
+    history.push('/login')
+    dispatch( clearStoredData() )
+  }
 
-                  <Typography variant="h6" className={classes.title}>
-                    Library
-                  </Typography>
+  return (
+    <>
+      <CssBaseline />
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+            onClick={toggleDrawer}
+          >
+            <MenuIcon />
+          </IconButton>
 
-                  <Button color="inherit" onClick={toggleDialog} >Signup</Button>
-                </Toolbar>
-            </AppBar>
-        </>
-    )
+          <Typography variant="h6" className={classes.title}>
+            Library
+          </Typography>
+
+          <Button
+            color="secondary"
+            variant="contained"
+            onClick={logOut}
+            startIcon={<ExitToApp />} 
+          >
+            Log Out
+          </Button>
+        </Toolbar>
+      </AppBar>
+    </>
+  )
 }

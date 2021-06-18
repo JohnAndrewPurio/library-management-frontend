@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import { logInUser } from '../../redux/actions'
 import { logInEndPoint } from '../../config'
 import { useHistory } from 'react-router-dom'
+import ErrorsToast from '../ErrorsToast'
 
 export default function LogIn() {
     const classes = useStyles()
@@ -30,7 +31,7 @@ export default function LogIn() {
 
     return (
         <div className={classes.login}>
-            <Paper className={classes.container} elevated={10} >
+            <Paper className={classes.container} elevated={2} >
                 <form action={logInEndPoint} method="POST" onSubmit={submitHandler} >
                     <List className={classes.list}>
                         <ListItem>
@@ -57,9 +58,9 @@ export default function LogIn() {
                         </ListItem>
                     </List>
                 </form>
-
-
             </Paper>
+
+            <ErrorsToast />
         </div>
     )
 }
